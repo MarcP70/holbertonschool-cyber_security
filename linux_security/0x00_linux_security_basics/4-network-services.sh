@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo netstat -tuln
+sudo -p -n -l -t -u
