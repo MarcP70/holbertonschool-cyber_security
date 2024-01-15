@@ -1,2 +1,2 @@
 #!/bin/bash
-find "$1" -type f -perm -4000 2>/dev/null | xargs ls -l
+find "$1" -perm -u=s -type f 2>/dev/null | xargs ls -l
