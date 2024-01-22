@@ -61,7 +61,9 @@ At the end of this project, you are expected to be able to explain to anyone, wi
 - You are not allowed to use backticks, &&, || or ;.
 - Your code should use the Betty style. It will be checked using betty-style.pl and betty-doc.pl
 
-## Quiz questions
+<details>
+<summary>Quiz questions</summary>
+
 ##### Question #0
 >What is ethical hacking?
 &#9744;    Unauthorized access to computer systems
@@ -166,6 +168,7 @@ At the end of this project, you are expected to be able to explain to anyone, wi
 &#9744;    Stealth Mode
 &#9744;    Virtualization
 &#9744;    Sandbox Environment
+</details>
 
 ## Tasks
 #### 0. Did you install kali ?
