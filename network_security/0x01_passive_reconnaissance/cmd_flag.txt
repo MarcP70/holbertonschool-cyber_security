@@ -1,0 +1,27 @@
+100-flag.txt
+┌──(kali㉿kali)-[~]
+└─$ dig +short -t TXT @10.42.1.245 passive.hbtn
+"Holberton Sec Lab - 8bb4f5c0f49d882f3899a8aee1586aa1"
+
+101-flag.txt
+┌──(kali㉿kali)-[~]
+└─$ dig +short -t NS  @10.42.1.245 passive.hbtn
+holberton.passive.hbtn.
+home.passive.hbtn.
+┌──(kali㉿kali)-[~]
+└─$ dig +short -t TXT @10.42.1.245 holberton.passive.hbtn
+"Holberton Sec Lab - 64bd6fab30a6d4914cfea79c81ca5f4d"
+
+102-flag.txt
+┌──(kali㉿kali)-[~]
+└─$ dig +short -t MX  @10.42.1.245 passive.hbtn
+0 mail1.passive.hbtn.
+10 mail2.passive.hbtn.
+100 mail.passive.hbtn.
+┌──(kali㉿kali)-[~]
+└─$ dig +short -t TXT @10.42.1.245 mail1.passive.hbtn
+┌──(kali㉿kali)-[~]
+└─$ dig +short -t TXT @10.42.1.245 mail2.passive.hbtn
+┌──(kali㉿kali)-[~]
+└─$ dig +short -t TXT @10.42.1.245 mail.passive.hbtn
+"Holberton Sec Lab - 92193561ed732053ebced1b8d9db430c"
